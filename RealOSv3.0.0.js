@@ -76,10 +76,10 @@ const Storage = {
             clockConfig: State.clockConfig,
             emptyApps: State.emptyApps
         };
-        localStorage.setItem('realos_settings', JSON.stringify(data));
+        localStorage.setItem('realos_v3_settings', JSON.stringify(data));
     },
     loadSettings: () => {
-        const data = localStorage.getItem('realos_settings');
+        const data = localStorage.getItem('realos_v3_settings');
         if (data) {
             const parsed = JSON.parse(data);
 
@@ -252,19 +252,19 @@ const State = {
         name: 'Guest',
         image: null
     },
-    appShape: parseInt(localStorage.getItem('realos_shape')) || 25,
-    iconPack: localStorage.getItem('realos_iconpack') || 'default',
-    hasSetup: localStorage.getItem('realos_setup') === 'true',
-    animationSpeed: parseFloat(localStorage.getItem('realos_animspeed') || '2.0'),
-    themeColor: localStorage.getItem('realos_theme') || '#ffffff',
+    appShape: parseInt(localStorage.getItem('realos_v3_shape')) || 27,
+    iconPack: localStorage.getItem('realos_v3_iconpack') || 'default',
+    hasSetup: localStorage.getItem('realos_v3_setup') === 'true',
+    animationSpeed: parseFloat(localStorage.getItem('realos_v3_animspeed') || '2.0'),
+    themeColor: localStorage.getItem('realos_v3_theme') || '#ffffff',
     swipeToClose: true,
-    homescreenBlur: localStorage.getItem('realos_hs_blur') === 'true',
-    blurBehindApps: localStorage.getItem('realos_blur_behind') !== 'false',
-    punchHole: localStorage.getItem('realos_punch') === 'true',
-    animStyle: localStorage.getItem('realos_anim_style') || 'new',
-    musicGradient: localStorage.getItem('realos_music_grad') !== 'false',
-    liteMode: localStorage.getItem('realos_litemode') === 'true',
-    specialEffects: localStorage.getItem('realos_special') === 'true',
+    homescreenBlur: localStorage.getItem('realos_v3_hs_blur') === 'true',
+    blurBehindApps: localStorage.getItem('realos_v3_blur_behind') !== 'false',
+    punchHole: localStorage.getItem('realos_v3_punch') === 'true',
+    animStyle: localStorage.getItem('realos_v3_anim_style') || 'new',
+    musicGradient: localStorage.getItem('realos_v3_music_grad') !== 'false',
+    liteMode: localStorage.getItem('realos_v3_litemode') === 'true',
+    specialEffects: localStorage.getItem('realos_v3_special') === 'true',
     iconPositions: {},
     animConfig: {
         openIconFade: 0.1,
@@ -1585,7 +1585,7 @@ const Setup = {
     helloWords: ['Hello!', 'Hola!', 'مرحبًا!', 'Hallo!', 'Bonjour!', 'Ciao!', '你好!', 'Olá!', 'こんにちは!', 'Привет!'],
     helloIndex: 0,
     check: () => {
-        const status = localStorage.getItem('realos_setup_status');
+        const status = localStorage.getItem('realos_v3_setup_status');
         if (!status) {
             document.getElementById('setup-screen').classList.add('active');
             Setup.startHelloCycle();
@@ -1681,7 +1681,7 @@ const Setup = {
         }
         noticeSlide.style.transform = '';
         noticeSlide.style.opacity = '';
-        const status = localStorage.getItem('realos_setup_status');
+        const status = localStorage.getItem('realos_v3_setup_status');
         if (status === 'notice_only' || status === 'done') {
             const el = document.getElementById('setup-screen');
             el.classList.add('fade-out');
@@ -1769,7 +1769,7 @@ const Setup = {
         if (Setup.helloInterval) clearInterval(Setup.helloInterval);
         setTimeout(() => {
             el.classList.remove('active', 'fade-out');
-            localStorage.setItem('realos_setup_status', 'done');
+            localStorage.setItem('realos_v3_setup_status', 'done');
             LockScreen.unlock(true);
         }, 500);
     }
@@ -5781,7 +5781,7 @@ const Apps = {
     },
     calc: {
         val: '',
-        history: JSON.parse(localStorage.getItem('calc_history') || '[]'),
+        history: JSON.parse(localStorage.getItem('realos_v3_calc_history') || '[]'),
         render: () => {
             document.getElementById('app-body').innerHTML = `
                 <div style="display:flex; flex-direction:column; height:100%;">
@@ -5849,7 +5849,7 @@ const Apps = {
                 if (Apps.calc.val && result !== undefined) {
                     Apps.calc.history.unshift({ eq: Apps.calc.val, res: result });
                     if (Apps.calc.history.length > 20) Apps.calc.history.pop();
-                    localStorage.setItem('calc_history', JSON.stringify(Apps.calc.history));
+                    localStorage.setItem('realos_v3_calc_history', JSON.stringify(Apps.calc.history));
                 }
                 Apps.calc.val = result;
                 document.getElementById('c-disp').innerText = Apps.calc.val;
@@ -6870,7 +6870,7 @@ const Apps = {
         },
         toggleLiteMode: () => {
             State.liteMode = !State.liteMode;
-            localStorage.setItem('realos_litemode', State.liteMode ? 'true' : 'false');
+            localStorage.setItem('realos_v3_litemode', State.liteMode ? 'true' : 'false');
             OS.applySettings();
             document.body.classList.toggle('lite-mode', State.liteMode);
             const listItem = event && event.target && event.target.closest ? event.target.closest('.list-item') : null;
@@ -7298,7 +7298,7 @@ const Apps = {
                 document.documentElement.style.setProperty('--wall', `url("${url}")`);
                 if (!supportsEffects && State.specialEffects) {
                     State.specialEffects = false;
-                    localStorage.setItem('realos_special', false);
+                    localStorage.setItem('realos_v3_special', false);
 
                     const mainToggle = document.querySelector('#main-sfx-toggle .toggle');
                     if (mainToggle) mainToggle.classList.remove('active');
@@ -7406,7 +7406,7 @@ const Apps = {
         },
         toggleBlurBehindApps: () => {
             State.blurBehindApps = !State.blurBehindApps;
-            localStorage.setItem('realos_blur_behind', State.blurBehindApps);
+            localStorage.setItem('realos_v3_blur_behind', State.blurBehindApps);
             State.animConfig.openWallBlur = State.blurBehindApps;
             Storage.saveSettings();
             if (State.blurBehindApps) document.body.classList.add('blur-behind');
@@ -7417,7 +7417,7 @@ const Apps = {
         togglePunchHole: () => {
             State.punchHole = !State.punchHole;
             OS.applySettings();
-            localStorage.setItem('realos_punch', State.punchHole);
+            localStorage.setItem('realos_v3_punch', State.punchHole);
             const toggle = event.target.closest('.list-item').querySelector('.toggle');
             if (toggle) toggle.classList.toggle('active', State.punchHole);
         },
@@ -7425,14 +7425,14 @@ const Apps = {
             State.musicGradient = !State.musicGradient;
             Storage.saveSettings();
             Island.update();
-            localStorage.setItem('realos_music_grad', State.musicGradient);
+            localStorage.setItem('realos_v3_music_grad', State.musicGradient);
             const toggle = event.target.closest('.list-item').querySelector('.toggle');
             if (toggle) toggle.classList.toggle('active', State.musicGradient);
         },
         setAppShape: (val) => {
             State.appShape = parseInt(val);
             OS.applySettings();
-            localStorage.setItem('realos_shape', val);
+            localStorage.setItem('realos_v3_shape', val);
             const previewRow = document.getElementById('shape-preview-row');
             if (previewRow) {
                 previewRow.querySelectorAll('[style*="border-radius"]').forEach(box => {
@@ -7448,7 +7448,7 @@ const Apps = {
         },
         toggleSpecialEffects: () => {
             State.specialEffects = !State.specialEffects;
-            localStorage.setItem('realos_special', State.specialEffects);
+            localStorage.setItem('realos_v3_special', State.specialEffects);
             OS.applySettings();
             const toggle = event.target.closest('.list-item').querySelector('.toggle');
             if (toggle) toggle.classList.toggle('active', State.specialEffects);
@@ -7457,7 +7457,7 @@ const Apps = {
             State.iconPack = pack;
             OS.applySettings();
             OS.renderApps();
-            localStorage.setItem('realos_iconpack', pack);
+            localStorage.setItem('realos_v3_iconpack', pack);
             const packNames = { default: 'RealOS (Default)', hyperos: 'HyperOS', coloros: 'ColorOS' };
             const dd = document.getElementById('sd-icon-pack');
             if (dd) {
@@ -7810,7 +7810,7 @@ const Apps = {
         setAnimSpeed: (speed) => {
             State.animationSpeed = speed;
             OS.applySettings();
-            localStorage.setItem('realos_animspeed', speed);
+            localStorage.setItem('realos_v3_animspeed', speed);
             Storage.saveSettings();
         },
         toggleFullscreen: () => {
@@ -7824,7 +7824,7 @@ const Apps = {
         },
         toggleSwipeClose: () => {
             State.swipeToClose = !State.swipeToClose;
-            localStorage.setItem('realos_swipe_close', State.swipeToClose);
+            localStorage.setItem('realos_v3_swipe_close', State.swipeToClose);
             Storage.saveSettings();
             OS.setupGestures();
             const toggle = event.target.closest('.list-item').querySelector('.toggle');
@@ -8105,7 +8105,7 @@ const Apps = {
         },
         toggleAnimStyle: () => {
             State.animStyle = State.animStyle === 'new' ? 'old' : 'new';
-            localStorage.setItem('realos_anim_style', State.animStyle);
+            localStorage.setItem('realos_v3_anim_style', State.animStyle);
             Storage.saveSettings();
             const toggle = event.target.closest('.list-item').querySelector('.toggle');
             if (toggle) toggle.classList.toggle('active', State.animStyle === 'new');
